@@ -36,13 +36,17 @@ def limpiar_texto(texto: str) -> str:
     return re.sub(r"\s+", " ", texto or "").strip()
 
 
+def es_numero_decimal(texto: str) -> bool:
+    return bool(re.fullmatch(r"\d+[,\.]\d+", texto.strip()))
+
+
 def obtener_top3_grupo(cod_grupo: str) -> list[dict]:
     url = (
-        f"https://www.futgal.es/pnfg/NPcd/NFG_CmpClasificacion"
+        f"https://www.futgal.es/pnfg/NPcd/NFG_VisClasificacion"
         f"?cod_primaria={COD_PRIMARIA}"
-        f"&CodCompeticion={COD_COMPETICION}"
-        f"&CodGrupo={cod_grupo}"
-        f"&CodTemporada={COD_TEMPORADA}"
+        f"&codcompeticion={COD_COMPETICION}"
+        f"&codgrupo={cod_grupo}"
+        f"&codtemporada={COD_TEMPORADA}"
     )
 
     req = urllib.request.Request(url, headers=HEADERS)
@@ -54,24 +58,32 @@ def obtener_top3_grupo(cod_grupo: str) -> list[dict]:
 
     for fila in soup.select("table tr"):
         celdas = [limpiar_texto(td.get_text()) for td in fila.find_all(["td", "th"])]
+        celdas = [c for c in celdas if c != ""]
         if len(celdas) < 4:
             continue
 
-        pos_match = re.match(r"^([1-3])[º\.]?$", celdas[0])
+        pos_match = re.fullmatch(r"([1-3])[º\.]?", celdas[0])
         if not pos_match:
             continue
 
         posicion = int(pos_match.group(1))
-        equipo = celdas[1] if len(celdas) > 1 else ""
-        numeros = [int(m) for c in celdas[2:] for m in re.findall(r"\b\d+\b", c)]
-        if not equipo or len(numeros) < 2:
+        equipo = celdas[1]
+
+        enteros = []
+        for celda in celdas[2:]:
+            if es_numero_decimal(celda):
+                continue
+            for m in re.findall(r"\b\d+\b", celda):
+                enteros.append(int(m))
+
+        if not equipo or len(enteros) < 2:
             continue
 
         top3.append({
             "pos": posicion,
             "equipo": equipo,
-            "pts": numeros[0],
-            "pj": numeros[1],
+            "pts": enteros[0],
+            "pj": enteros[1],
         })
 
         if len(top3) == 3:
@@ -101,9 +113,9 @@ def main():
                 "grupo": num,
                 "cod_grupo": cod,
                 "url_jornada": (
-                    f"https://www.futgal.es/pnfg/NPcd/NFG_CmpJornada"
-                    f"?cod_primaria={COD_PRIMARIA}&CodCompeticion={COD_COMPETICION}"
-                    f"&CodGrupo={cod}&CodTemporada={COD_TEMPORADA}&CodJornada=8"
+                    f"https://www.futgal.es/pnfg/NPcd/NFG_VisClasificacion"
+                    f"?cod_primaria={COD_PRIMARIA}&codcompeticion={COD_COMPETICION}"
+                    f"&codgrupo={cod}&codtemporada={COD_TEMPORADA}"
                 ),
                 "top3": top3,
                 "estado": "ok" if top3 else "sin_datos",
@@ -114,9 +126,9 @@ def main():
                 "grupo": num,
                 "cod_grupo": cod,
                 "url_jornada": (
-                    f"https://www.futgal.es/pnfg/NPcd/NFG_CmpJornada"
-                    f"?cod_primaria={COD_PRIMARIA}&CodCompeticion={COD_COMPETICION}"
-                    f"&CodGrupo={cod}&CodTemporada={COD_TEMPORADA}&CodJornada=8"
+                    f"https://www.futgal.es/pnfg/NPcd/NFG_VisClasificacion"
+                    f"?cod_primaria={COD_PRIMARIA}&codcompeticion={COD_COMPETICION}"
+                    f"&codgrupo={cod}&codtemporada={COD_TEMPORADA}"
                 ),
                 "top3": [],
                 "estado": f"error: {exc}",
