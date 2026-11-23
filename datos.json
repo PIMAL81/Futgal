@@ -3,82 +3,82 @@
   "zona": "Vigo · 1ª Fase",
   "cod_competicion": "26991813",
   "cod_temporada": "22",
-  "actualizado_en": "23/11 21:50",
+  "actualizado_en": "23/11 22:21",
   "grupos": [
     {
       "grupo": 1,
       "cod_grupo": "28767141",
-      "url_jornada": "https://www.futgal.es/pnfg/NPcd/NFG_CmpJornada?cod_primaria=1000120&CodCompeticion=26991813&CodGrupo=28767141&CodTemporada=22&CodJornada=8",
+      "url_jornada": "https://www.futgal.es/pnfg/NPcd/NFG_VisClasificacion?cod_primaria=1000120&codcompeticion=26991813&codgrupo=28767141&codtemporada=22",
       "top3": [],
       "estado": "sin_datos"
     },
     {
       "grupo": 2,
       "cod_grupo": "28767176",
-      "url_jornada": "https://www.futgal.es/pnfg/NPcd/NFG_CmpJornada?cod_primaria=1000120&CodCompeticion=26991813&CodGrupo=28767176&CodTemporada=22&CodJornada=8",
+      "url_jornada": "https://www.futgal.es/pnfg/NPcd/NFG_VisClasificacion?cod_primaria=1000120&codcompeticion=26991813&codgrupo=28767176&codtemporada=22",
       "top3": [],
       "estado": "sin_datos"
     },
     {
       "grupo": 3,
       "cod_grupo": "28767199",
-      "url_jornada": "https://www.futgal.es/pnfg/NPcd/NFG_CmpJornada?cod_primaria=1000120&CodCompeticion=26991813&CodGrupo=28767199&CodTemporada=22&CodJornada=8",
+      "url_jornada": "https://www.futgal.es/pnfg/NPcd/NFG_VisClasificacion?cod_primaria=1000120&codcompeticion=26991813&codgrupo=28767199&codtemporada=22",
       "top3": [],
       "estado": "sin_datos"
     },
     {
       "grupo": 4,
       "cod_grupo": "28767203",
-      "url_jornada": "https://www.futgal.es/pnfg/NPcd/NFG_CmpJornada?cod_primaria=1000120&CodCompeticion=26991813&CodGrupo=28767203&CodTemporada=22&CodJornada=8",
+      "url_jornada": "https://www.futgal.es/pnfg/NPcd/NFG_VisClasificacion?cod_primaria=1000120&codcompeticion=26991813&codgrupo=28767203&codtemporada=22",
       "top3": [],
       "estado": "sin_datos"
     },
     {
       "grupo": 5,
       "cod_grupo": "28767240",
-      "url_jornada": "https://www.futgal.es/pnfg/NPcd/NFG_CmpJornada?cod_primaria=1000120&CodCompeticion=26991813&CodGrupo=28767240&CodTemporada=22&CodJornada=8",
+      "url_jornada": "https://www.futgal.es/pnfg/NPcd/NFG_VisClasificacion?cod_primaria=1000120&codcompeticion=26991813&codgrupo=28767240&codtemporada=22",
       "top3": [],
       "estado": "sin_datos"
     },
     {
       "grupo": 6,
       "cod_grupo": "28767243",
-      "url_jornada": "https://www.futgal.es/pnfg/NPcd/NFG_CmpJornada?cod_primaria=1000120&CodCompeticion=26991813&CodGrupo=28767243&CodTemporada=22&CodJornada=8",
+      "url_jornada": "https://www.futgal.es/pnfg/NPcd/NFG_VisClasificacion?cod_primaria=1000120&codcompeticion=26991813&codgrupo=28767243&codtemporada=22",
       "top3": [],
       "estado": "sin_datos"
     },
     {
       "grupo": 7,
       "cod_grupo": "28767271",
-      "url_jornada": "https://www.futgal.es/pnfg/NPcd/NFG_CmpJornada?cod_primaria=1000120&CodCompeticion=26991813&CodGrupo=28767271&CodTemporada=22&CodJornada=8",
+      "url_jornada": "https://www.futgal.es/pnfg/NPcd/NFG_VisClasificacion?cod_primaria=1000120&codcompeticion=26991813&codgrupo=28767271&codtemporada=22",
       "top3": [],
       "estado": "sin_datos"
     },
     {
       "grupo": 8,
       "cod_grupo": "28767276",
-      "url_jornada": "https://www.futgal.es/pnfg/NPcd/NFG_CmpJornada?cod_primaria=1000120&CodCompeticion=26991813&CodGrupo=28767276&CodTemporada=22&CodJornada=8",
+      "url_jornada": "https://www.futgal.es/pnfg/NPcd/NFG_VisClasificacion?cod_primaria=1000120&codcompeticion=26991813&codgrupo=28767276&codtemporada=22",
       "top3": [],
       "estado": "sin_datos"
     },
     {
       "grupo": 9,
       "cod_grupo": "28767279",
-      "url_jornada": "https://www.futgal.es/pnfg/NPcd/NFG_CmpJornada?cod_primaria=1000120&CodCompeticion=26991813&CodGrupo=28767279&CodTemporada=22&CodJornada=8",
+      "url_jornada": "https://www.futgal.es/pnfg/NPcd/NFG_VisClasificacion?cod_primaria=1000120&codcompeticion=26991813&codgrupo=28767279&codtemporada=22",
       "top3": [],
       "estado": "sin_datos"
     },
     {
       "grupo": 10,
       "cod_grupo": "28767351",
-      "url_jornada": "https://www.futgal.es/pnfg/NPcd/NFG_CmpJornada?cod_primaria=1000120&CodCompeticion=26991813&CodGrupo=28767351&CodTemporada=22&CodJornada=8",
+      "url_jornada": "https://www.futgal.es/pnfg/NPcd/NFG_VisClasificacion?cod_primaria=1000120&codcompeticion=26991813&codgrupo=28767351&codtemporada=22",
       "top3": [],
       "estado": "sin_datos"
     },
     {
       "grupo": 11,
       "cod_grupo": "28767370",
-      "url_jornada": "https://www.futgal.es/pnfg/NPcd/NFG_CmpJornada?cod_primaria=1000120&CodCompeticion=26991813&CodGrupo=28767370&CodTemporada=22&CodJornada=8",
+      "url_jornada": "https://www.futgal.es/pnfg/NPcd/NFG_VisClasificacion?cod_primaria=1000120&codcompeticion=26991813&codgrupo=28767370&codtemporada=22",
       "top3": [],
       "estado": "sin_datos"
     }
