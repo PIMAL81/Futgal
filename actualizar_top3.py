@@ -1,6 +1,7 @@
 from datetime import datetime
 import json
 import re
+import subprocess
 import time
 import urllib.request
 from zoneinfo import ZoneInfo
@@ -24,13 +25,14 @@ GRUPOS = [
     {"grupo": 11, "cod_grupo": "28767370"},
 ]
 
-HEADERS = {
+BASE_HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
         "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
     ),
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
     "Accept-Language": "es-ES,es;q=0.9,gl;q=0.8",
+    "Connection": "keep-alive",
 }
 
 
@@ -40,6 +42,55 @@ def limpiar_texto(texto: str) -> str:
 
 def es_numero_decimal(texto: str) -> bool:
     return bool(re.fullmatch(r"\d+[,\.]\d+", texto.strip()))
+
+
+def descargar_html(url: str) -> tuple[str, str]:
+    headers = dict(BASE_HEADERS)
+    headers["Referer"] = url
+
+    try:
+        req = urllib.request.Request(url, headers=headers)
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            status = getattr(resp, "status", 200)
+            raw = resp.read()
+            if raw:
+                return raw.decode("utf-8", errors="replace"), f"urllib:{status}"
+    except Exception as exc:
+        urllib_err = str(exc)
+    else:
+        urllib_err = "urllib:200_vacio"
+
+    try:
+        proc = subprocess.run(
+            [
+                "curl",
+                "-sL",
+                "--max-time",
+                "15",
+                "-A",
+                BASE_HEADERS["User-Agent"],
+                "-e",
+                url,
+                "-w",
+                "\n__HTTP_CODE__:%{http_code}",
+                url,
+            ],
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            check=False,
+        )
+        salida = proc.stdout or ""
+        if "\n__HTTP_CODE__:" in salida:
+            cuerpo, codigo = salida.rsplit("\n__HTTP_CODE__:", 1)
+            if cuerpo.strip():
+                return cuerpo, f"curl:{codigo.strip()}"
+            return "", f"{urllib_err}|curl:{codigo.strip()}_vacio"
+    except Exception as exc:
+        return "", f"{urllib_err}|curl_err:{exc}"
+
+    return "", urllib_err
 
 
 def extraer_de_html(html: str) -> tuple[list[dict], str]:
@@ -52,7 +103,6 @@ def extraer_de_html(html: str) -> tuple[list[dict], str]:
         if len(celdas_no_vacias) < 3:
             continue
 
-        # Buscar posición 1, 2 o 3 en las dos primeras celdas no vacías
         posicion = None
         idx_pos = -1
         for i in range(min(2, len(celdas_no_vacias))):
@@ -65,7 +115,6 @@ def extraer_de_html(html: str) -> tuple[list[dict], str]:
         if posicion is None:
             continue
 
-        # El nombre del equipo suele ir justo después de la posición
         equipo = ""
         for c in celdas_no_vacias[idx_pos + 1 :]:
             if re.fullmatch(r"[\d,\.\-\s]+", c):
@@ -128,12 +177,9 @@ def obtener_top3_grupo(cod_grupo: str) -> tuple[list[dict], str]:
 
     ultimo_info = ""
     for url in urls:
-        req = urllib.request.Request(url, headers=HEADERS)
-        with urllib.request.urlopen(req, timeout=15) as resp:
-            html = resp.read().decode("utf-8", errors="replace")
-
+        html, via = descargar_html(url)
         top3, info = extraer_de_html(html)
-        ultimo_info = f"{info} url={url.split('?')[0].split('/')[-1]}"
+        ultimo_info = f"{info} via={via} url={url.split('?')[0].split('/')[-1]}"
         if len(top3) >= 1:
             return top3, ultimo_info
 
