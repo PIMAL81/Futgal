@@ -26,9 +26,11 @@ GRUPOS = [
 
 HEADERS = {
     "User-Agent": (
-        "Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) "
-        "AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1"
-    )
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+    ),
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "es-ES,es;q=0.9,gl;q=0.8",
 }
 
 
@@ -40,43 +42,52 @@ def es_numero_decimal(texto: str) -> bool:
     return bool(re.fullmatch(r"\d+[,\.]\d+", texto.strip()))
 
 
-def obtener_top3_grupo(cod_grupo: str) -> list[dict]:
-    url = (
-        f"https://www.futgal.es/pnfg/NPcd/NFG_VisClasificacion"
-        f"?cod_primaria={COD_PRIMARIA}"
-        f"&codcompeticion={COD_COMPETICION}"
-        f"&codgrupo={cod_grupo}"
-        f"&codtemporada={COD_TEMPORADA}"
-    )
-
-    req = urllib.request.Request(url, headers=HEADERS)
-    with urllib.request.urlopen(req, timeout=15) as resp:
-        html = resp.read().decode("utf-8", errors="replace")
-
+def extraer_de_html(html: str) -> tuple[list[dict], str]:
     soup = BeautifulSoup(html, "html.parser")
     top3 = []
 
     for fila in soup.select("table tr"):
         celdas = [limpiar_texto(td.get_text()) for td in fila.find_all(["td", "th"])]
-        celdas = [c for c in celdas if c != ""]
-        if len(celdas) < 4:
+        celdas_no_vacias = [c for c in celdas if c != ""]
+        if len(celdas_no_vacias) < 3:
             continue
 
-        pos_match = re.fullmatch(r"([1-3])[º\.]?", celdas[0])
-        if not pos_match:
+        # Buscar posición 1, 2 o 3 en las dos primeras celdas no vacías
+        posicion = None
+        idx_pos = -1
+        for i in range(min(2, len(celdas_no_vacias))):
+            m = re.fullmatch(r"([1-3])[º\.]?", celdas_no_vacias[i])
+            if m:
+                posicion = int(m.group(1))
+                idx_pos = i
+                break
+
+        if posicion is None:
             continue
 
-        posicion = int(pos_match.group(1))
-        equipo = celdas[1]
+        # El nombre del equipo suele ir justo después de la posición
+        equipo = ""
+        for c in celdas_no_vacias[idx_pos + 1 :]:
+            if re.fullmatch(r"[\d,\.\-\s]+", c):
+                continue
+            if len(c) >= 2:
+                equipo = c
+                break
+
+        if not equipo:
+            continue
 
         enteros = []
-        for celda in celdas[2:]:
-            if es_numero_decimal(celda):
+        for c in celdas_no_vacias[idx_pos + 1 :]:
+            if c == equipo or es_numero_decimal(c):
                 continue
-            for m in re.findall(r"\b\d+\b", celda):
-                enteros.append(int(m))
+            for num_str in re.findall(r"\b\d+\b", c):
+                enteros.append(int(num_str))
 
-        if not equipo or len(enteros) < 2:
+        if len(enteros) < 2:
+            continue
+
+        if any(item["pos"] == posicion for item in top3):
             continue
 
         top3.append({
@@ -89,7 +100,44 @@ def obtener_top3_grupo(cod_grupo: str) -> list[dict]:
         if len(top3) == 3:
             break
 
-    return sorted(top3, key=lambda x: x["pos"])
+    top3 = sorted(top3, key=lambda x: x["pos"])
+    titulo = limpiar_texto(soup.title.get_text()) if soup.title else "sin titulo"
+    num_tablas = len(soup.select("table"))
+    num_filas = len(soup.select("table tr"))
+    info = f"title='{titulo[:45]}' tablas={num_tablas} filas={num_filas} len_html={len(html)}"
+    return top3, info
+
+
+def obtener_top3_grupo(cod_grupo: str) -> tuple[list[dict], str]:
+    urls = [
+        (
+            f"https://www.futgal.es/pnfg/NPcd/NFG_VisClasificacion"
+            f"?cod_primaria={COD_PRIMARIA}"
+            f"&codcompeticion={COD_COMPETICION}"
+            f"&codgrupo={cod_grupo}"
+            f"&codtemporada={COD_TEMPORADA}"
+        ),
+        (
+            f"https://www.futgal.es/pnfg/NPcd/NFG_CmpClasificacion"
+            f"?cod_primaria={COD_PRIMARIA}"
+            f"&CodCompeticion={COD_COMPETICION}"
+            f"&CodGrupo={cod_grupo}"
+            f"&CodTemporada={COD_TEMPORADA}"
+        ),
+    ]
+
+    ultimo_info = ""
+    for url in urls:
+        req = urllib.request.Request(url, headers=HEADERS)
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            html = resp.read().decode("utf-8", errors="replace")
+
+        top3, info = extraer_de_html(html)
+        ultimo_info = f"{info} url={url.split('?')[0].split('/')[-1]}"
+        if len(top3) >= 1:
+            return top3, ultimo_info
+
+    return [], ultimo_info
 
 
 def main():
@@ -107,29 +155,29 @@ def main():
     for idx, item in enumerate(GRUPOS):
         cod = item["cod_grupo"]
         num = item["grupo"]
+        url_web = (
+            f"https://www.futgal.es/pnfg/NPcd/NFG_VisClasificacion"
+            f"?cod_primaria={COD_PRIMARIA}&codcompeticion={COD_COMPETICION}"
+            f"&codgrupo={cod}&codtemporada={COD_TEMPORADA}"
+        )
         try:
-            top3 = obtener_top3_grupo(cod)
+            top3, info = obtener_top3_grupo(cod)
             resultado["grupos"].append({
                 "grupo": num,
                 "cod_grupo": cod,
-                "url_jornada": (
-                    f"https://www.futgal.es/pnfg/NPcd/NFG_VisClasificacion"
-                    f"?cod_primaria={COD_PRIMARIA}&codcompeticion={COD_COMPETICION}"
-                    f"&codgrupo={cod}&codtemporada={COD_TEMPORADA}"
-                ),
+                "url_jornada": url_web,
                 "top3": top3,
                 "estado": "ok" if top3 else "sin_datos",
             })
-            print(f"Grupo {num:02d} ({cod}): {len(top3)} equipos extraídos")
+            if top3:
+                print(f"Grupo {num:02d} ({cod}): {len(top3)} equipos extraídos")
+            else:
+                print(f"Grupo {num:02d} ({cod}): 0 equipos extraídos [{info}]")
         except Exception as exc:
             resultado["grupos"].append({
                 "grupo": num,
                 "cod_grupo": cod,
-                "url_jornada": (
-                    f"https://www.futgal.es/pnfg/NPcd/NFG_VisClasificacion"
-                    f"?cod_primaria={COD_PRIMARIA}&codcompeticion={COD_COMPETICION}"
-                    f"&codgrupo={cod}&codtemporada={COD_TEMPORADA}"
-                ),
+                "url_jornada": url_web,
                 "top3": [],
                 "estado": f"error: {exc}",
             })
