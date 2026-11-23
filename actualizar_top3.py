@@ -1,10 +1,10 @@
 from datetime import datetime
 import json
 import re
-import subprocess
 import time
 from zoneinfo import ZoneInfo
 from bs4 import BeautifulSoup
+from playwright.sync_api import sync_playwright
 
 COD_COMPETICION = "26991813"
 COD_TEMPORADA = "22"
@@ -29,8 +29,6 @@ USER_AGENT = (
     "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
 )
 
-COOKIE_JAR = "/tmp/futgal_cookies.txt"
-
 
 def limpiar_texto(texto: str) -> str:
     return re.sub(r"\s+", " ", texto or "").strip()
@@ -38,71 +36,6 @@ def limpiar_texto(texto: str) -> str:
 
 def es_numero_decimal(texto: str) -> bool:
     return bool(re.fullmatch(r"\d+[,\.]\d+", texto.strip()))
-
-
-def preparar_sesion_cookies() -> None:
-    subprocess.run(
-        [
-            "curl",
-            "-sL",
-            "--compressed",
-            "--max-time",
-            "15",
-            "-c",
-            COOKIE_JAR,
-            "-b",
-            COOKIE_JAR,
-            "-A",
-            USER_AGENT,
-            "-H",
-            "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-            "-H",
-            "Accept-Language: es-ES,es;q=0.9,gl;q=0.8",
-            "https://www.futgal.es/",
-        ],
-        capture_output=True,
-        check=False,
-    )
-
-
-def descargar_html(url: str) -> tuple[str, str]:
-    proc = subprocess.run(
-        [
-            "curl",
-            "-sL",
-            "--compressed",
-            "--max-time",
-            "15",
-            "-c",
-            COOKIE_JAR,
-            "-b",
-            COOKIE_JAR,
-            "-A",
-            USER_AGENT,
-            "-e",
-            "https://www.futgal.es/",
-            "-H",
-            "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-            "-H",
-            "Accept-Language: es-ES,es;q=0.9,gl;q=0.8",
-            "-w",
-            "\n__HTTP_CODE__:%{http_code}",
-            url,
-        ],
-        capture_output=True,
-        text=True,
-        encoding="utf-8",
-        errors="replace",
-        check=False,
-    )
-    salida = proc.stdout or ""
-    if "\n__HTTP_CODE__:" in salida:
-        cuerpo, codigo = salida.rsplit("\n__HTTP_CODE__:", 1)
-        code = codigo.strip()
-        if cuerpo.strip():
-            return cuerpo, f"curl_cookie:{code}"
-        return "", f"curl_cookie:{code}_vacio"
-    return "", "curl_cookie:sin_codigo"
 
 
 def extraer_de_html(html: str) -> tuple[list[dict], str]:
@@ -169,37 +102,28 @@ def extraer_de_html(html: str) -> tuple[list[dict], str]:
     return top3, info
 
 
-def obtener_top3_grupo(cod_grupo: str) -> tuple[list[dict], str]:
-    urls = [
-        (
-            f"https://www.futgal.es/pnfg/NPcd/NFG_VisClasificacion"
-            f"?cod_primaria={COD_PRIMARIA}"
-            f"&codcompeticion={COD_COMPETICION}"
-            f"&codgrupo={cod_grupo}"
-            f"&codtemporada={COD_TEMPORADA}"
-        ),
-        (
-            f"https://www.futgal.es/pnfg/NPcd/NFG_CmpClasificacion"
-            f"?cod_primaria={COD_PRIMARIA}"
-            f"&CodCompeticion={COD_COMPETICION}"
-            f"&CodGrupo={cod_grupo}"
-            f"&CodTemporada={COD_TEMPORADA}"
-        ),
-    ]
+def obtener_top3_con_pagina(page, cod_grupo: str) -> tuple[list[dict], str]:
+    url = (
+        f"https://www.futgal.es/pnfg/NPcd/NFG_VisClasificacion"
+        f"?cod_primaria={COD_PRIMARIA}"
+        f"&codcompeticion={COD_COMPETICION}"
+        f"&codgrupo={cod_grupo}"
+        f"&codtemporada={COD_TEMPORADA}"
+    )
 
-    ultimo_info = ""
-    for url in urls:
-        html, via = descargar_html(url)
-        top3, info = extraer_de_html(html)
-        ultimo_info = f"{info} via={via} url={url.split('?')[0].split('/')[-1]}"
-        if len(top3) >= 1:
-            return top3, ultimo_info
+    page.goto(url, wait_until="domcontentloaded", timeout=25000)
+    try:
+        page.wait_for_selector("table tr", timeout=8000)
+    except Exception:
+        pass
+    page.wait_for_timeout(800)
 
-    return [], ultimo_info
+    html = page.content()
+    top3, info = extraer_de_html(html)
+    return top3, f"{info} via=playwright"
 
 
 def main():
-    preparar_sesion_cookies()
     ahora_es = datetime.now(ZoneInfo("Europe/Madrid")).strftime("%d/%m %H:%M")
 
     resultado = {
@@ -211,39 +135,49 @@ def main():
         "grupos": [],
     }
 
-    for idx, item in enumerate(GRUPOS):
-        cod = item["cod_grupo"]
-        num = item["grupo"]
-        url_web = (
-            f"https://www.futgal.es/pnfg/NPcd/NFG_VisClasificacion"
-            f"?cod_primaria={COD_PRIMARIA}&codcompeticion={COD_COMPETICION}"
-            f"&codgrupo={cod}&codtemporada={COD_TEMPORADA}"
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        context = browser.new_context(
+            user_agent=USER_AGENT,
+            locale="es-ES",
         )
-        try:
-            top3, info = obtener_top3_grupo(cod)
-            resultado["grupos"].append({
-                "grupo": num,
-                "cod_grupo": cod,
-                "url_jornada": url_web,
-                "top3": top3,
-                "estado": "ok" if top3 else "sin_datos",
-            })
-            if top3:
-                print(f"Grupo {num:02d} ({cod}): {len(top3)} equipos extraídos")
-            else:
-                print(f"Grupo {num:02d} ({cod}): 0 equipos extraídos [{info}]")
-        except Exception as exc:
-            resultado["grupos"].append({
-                "grupo": num,
-                "cod_grupo": cod,
-                "url_jornada": url_web,
-                "top3": [],
-                "estado": f"error: {exc}",
-            })
-            print(f"Grupo {num:02d} ({cod}): error -> {exc}")
+        page = context.new_page()
 
-        if idx < len(GRUPOS) - 1:
-            time.sleep(0.6)
+        for idx, item in enumerate(GRUPOS):
+            cod = item["cod_grupo"]
+            num = item["grupo"]
+            url_web = (
+                f"https://www.futgal.es/pnfg/NPcd/NFG_VisClasificacion"
+                f"?cod_primaria={COD_PRIMARIA}&codcompeticion={COD_COMPETICION}"
+                f"&codgrupo={cod}&codtemporada={COD_TEMPORADA}"
+            )
+            try:
+                top3, info = obtener_top3_con_pagina(page, cod)
+                resultado["grupos"].append({
+                    "grupo": num,
+                    "cod_grupo": cod,
+                    "url_jornada": url_web,
+                    "top3": top3,
+                    "estado": "ok" if top3 else "sin_datos",
+                })
+                if top3:
+                    print(f"Grupo {num:02d} ({cod}): {len(top3)} equipos extraídos")
+                else:
+                    print(f"Grupo {num:02d} ({cod}): 0 equipos extraídos [{info}]")
+            except Exception as exc:
+                resultado["grupos"].append({
+                    "grupo": num,
+                    "cod_grupo": cod,
+                    "url_jornada": url_web,
+                    "top3": [],
+                    "estado": f"error: {exc}",
+                })
+                print(f"Grupo {num:02d} ({cod}): error -> {exc}")
+
+            if idx < len(GRUPOS) - 1:
+                time.sleep(0.5)
+
+        browser.close()
 
     with open("datos.json", "w", encoding="utf-8") as f:
         json.dump(resultado, f, ensure_ascii=False, indent=2)
