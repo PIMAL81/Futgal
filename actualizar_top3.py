@@ -3,7 +3,6 @@ import json
 import re
 import subprocess
 import time
-import urllib.request
 from zoneinfo import ZoneInfo
 from bs4 import BeautifulSoup
 
@@ -25,15 +24,12 @@ GRUPOS = [
     {"grupo": 11, "cod_grupo": "28767370"},
 ]
 
-BASE_HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-        "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
-    ),
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-    "Accept-Language": "es-ES,es;q=0.9,gl;q=0.8",
-    "Connection": "keep-alive",
-}
+USER_AGENT = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+    "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+)
+
+COOKIE_JAR = "/tmp/futgal_cookies.txt"
 
 
 def limpiar_texto(texto: str) -> str:
@@ -44,53 +40,69 @@ def es_numero_decimal(texto: str) -> bool:
     return bool(re.fullmatch(r"\d+[,\.]\d+", texto.strip()))
 
 
+def preparar_sesion_cookies() -> None:
+    subprocess.run(
+        [
+            "curl",
+            "-sL",
+            "--compressed",
+            "--max-time",
+            "15",
+            "-c",
+            COOKIE_JAR,
+            "-b",
+            COOKIE_JAR,
+            "-A",
+            USER_AGENT,
+            "-H",
+            "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "-H",
+            "Accept-Language: es-ES,es;q=0.9,gl;q=0.8",
+            "https://www.futgal.es/",
+        ],
+        capture_output=True,
+        check=False,
+    )
+
+
 def descargar_html(url: str) -> tuple[str, str]:
-    headers = dict(BASE_HEADERS)
-    headers["Referer"] = url
-
-    try:
-        req = urllib.request.Request(url, headers=headers)
-        with urllib.request.urlopen(req, timeout=15) as resp:
-            status = getattr(resp, "status", 200)
-            raw = resp.read()
-            if raw:
-                return raw.decode("utf-8", errors="replace"), f"urllib:{status}"
-    except Exception as exc:
-        urllib_err = str(exc)
-    else:
-        urllib_err = "urllib:200_vacio"
-
-    try:
-        proc = subprocess.run(
-            [
-                "curl",
-                "-sL",
-                "--max-time",
-                "15",
-                "-A",
-                BASE_HEADERS["User-Agent"],
-                "-e",
-                url,
-                "-w",
-                "\n__HTTP_CODE__:%{http_code}",
-                url,
-            ],
-            capture_output=True,
-            text=True,
-            encoding="utf-8",
-            errors="replace",
-            check=False,
-        )
-        salida = proc.stdout or ""
-        if "\n__HTTP_CODE__:" in salida:
-            cuerpo, codigo = salida.rsplit("\n__HTTP_CODE__:", 1)
-            if cuerpo.strip():
-                return cuerpo, f"curl:{codigo.strip()}"
-            return "", f"{urllib_err}|curl:{codigo.strip()}_vacio"
-    except Exception as exc:
-        return "", f"{urllib_err}|curl_err:{exc}"
-
-    return "", urllib_err
+    proc = subprocess.run(
+        [
+            "curl",
+            "-sL",
+            "--compressed",
+            "--max-time",
+            "15",
+            "-c",
+            COOKIE_JAR,
+            "-b",
+            COOKIE_JAR,
+            "-A",
+            USER_AGENT,
+            "-e",
+            "https://www.futgal.es/",
+            "-H",
+            "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "-H",
+            "Accept-Language: es-ES,es;q=0.9,gl;q=0.8",
+            "-w",
+            "\n__HTTP_CODE__:%{http_code}",
+            url,
+        ],
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        check=False,
+    )
+    salida = proc.stdout or ""
+    if "\n__HTTP_CODE__:" in salida:
+        cuerpo, codigo = salida.rsplit("\n__HTTP_CODE__:", 1)
+        code = codigo.strip()
+        if cuerpo.strip():
+            return cuerpo, f"curl_cookie:{code}"
+        return "", f"curl_cookie:{code}_vacio"
+    return "", "curl_cookie:sin_codigo"
 
 
 def extraer_de_html(html: str) -> tuple[list[dict], str]:
@@ -187,6 +199,7 @@ def obtener_top3_grupo(cod_grupo: str) -> tuple[list[dict], str]:
 
 
 def main():
+    preparar_sesion_cookies()
     ahora_es = datetime.now(ZoneInfo("Europe/Madrid")).strftime("%d/%m %H:%M")
 
     resultado = {
