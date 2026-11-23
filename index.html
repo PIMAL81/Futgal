@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <title>Top 3 · Benjamín F-8 Segunda Futgal (Vigo)</title>
+  <style>
+    :root {
+      --bg: #f3f5f8;
+      --card: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --accent: #0f52ba;
+      --border: #e5e7eb;
+      --gold: #d97706;
+      --silver: #64748b;
+      --bronze: #b45309;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      padding: 0 0 40px 0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 16px 12px;
+    }
+
+    .title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin: 0;
+      letter-spacing: -0.01em;
+    }
+
+    .subtitle {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin: 3px 0 10px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    input, select, button {
+      font-size: 0.9rem;
+      padding: 9px 11px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+    }
+
+    input {
+      flex: 1 1 140px;
+      min-width: 0;
+    }
+
+    button {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    button:active {
+      opacity: 0.85;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+
+    .container {
+      max-width: 640px;
+      margin: 14px auto 0;
+      padding: 0 14px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px 14px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #f1f3f5;
+    }
+
+    .group-badge {
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: var(--accent);
+    }
+
+    .group-link {
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-decoration: none;
+      background: #f8fafc;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+    }
+
+    .cols-head {
+      display: grid;
+      grid-template-columns: 24px 1fr 44px 44px;
+      gap: 6px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      padding: 0 2px;
+    }
+
+    .cols-head span:nth-child(3),
+    .cols-head span:nth-child(4) {
+      text-align: right;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 24px 1fr 44px 44px;
+      gap: 6px;
+      align-items: center;
+      padding: 6px 2px;
+      font-size: 0.88rem;
+      border-bottom: 1px dashed #eef0f3;
+    }
+
+    .row:last-child {
+      border-bottom: none;
+    }
+
+    .pos {
+      font-weight: 700;
+      font-size: 0.82rem;
+    }
+
+    .pos-1 { color: var(--gold); }
+    .pos-2 { color: var(--silver); }
+    .pos-3 { color: var(--bronze); }
+
+    .team {
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .pts {
+      text-align: right;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .pj {
+      text-align: right;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .empty-note {
+      font-size: 0.82rem;
+      color: var(--muted);
+      padding: 8px 0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 class="title">BENJAMIN F-8 - SEGUNDA FUTGAL</h1>
+    <p class="subtitle" id="subtitulo">Vigo · 1ª Fase · Top 3 de los 11 grupos</p>
+    <div class="controls">
+      <input id="buscador" type="search" placeholder="Buscar equipo o grupo..." autocomplete="off" />
+      <select id="filtroGrupo" aria-label="Filtrar por grupo">
+        <option value="todos">Todos (1–11)</option>
+      </select>
+      <button id="btnActualizar" type="button">Actualizar</button>
+    </div>
+  </header>
+
+  <main class="container" id="listaGrupos"></main>
+
+  <script>
+    const GRUPOS_BASE = [
+      { grupo: 1,  cod_grupo: "28767141" },
+      { grupo: 2,  cod_grupo: "28767176" },
+      { grupo: 3,  cod_grupo: "28767199" },
+      { grupo: 4,  cod_grupo: "28767203" },
+      { grupo: 5,  cod_grupo: "28767240" },
+      { grupo: 6,  cod_grupo: "28767243" },
+      { grupo: 7,  cod_grupo: "28767271" },
+      { grupo: 8,  cod_grupo: "28767276" },
+      { grupo: 9,  cod_grupo: "28767279" },
+      { grupo: 10, cod_grupo: "28767351" },
+      { grupo: 11, cod_grupo: "28767370" }
+    ].map(g => ({
+      ...g,
+      url_jornada: `https://www.futgal.es/pnfg/NPcd/NFG_CmpJornada?cod_primaria=1000120&CodCompeticion=26991813&CodGrupo=${g.cod_grupo}&CodTemporada=22&CodJornada=8`,
+      top3: []
+    }));
+
+    const selectGrupo = document.getElementById("filtroGrupo");
+    const inputBuscador = document.getElementById("buscador");
+    const btnActualizar = document.getElementById("btnActualizar");
+    const contenedor = document.getElementById("listaGrupos");
+    const subtitulo = document.getElementById("subtitulo");
+
+    GRUPOS_BASE.forEach(g => {
+      const opt = document.createElement("option");
+      opt.value = String(g.grupo);
+      opt.textContent = `Grupo ${g.grupo}`;
+      selectGrupo.appendChild(opt);
+    });
+
+    let datosGrupos = GRUPOS_BASE;
+
+    function renderizar() {
+      const texto = inputBuscador.value.trim().toLowerCase();
+      const grupoSel = selectGrupo.value;
+
+      const filtrados = datosGrupos.filter(g => {
+        if (grupoSel !== "todos" && String(g.grupo) !== grupoSel) return false;
+        if (!texto) return true;
+
+        const coincideGrupo = `grupo ${g.grupo}`.includes(texto) || String(g.grupo) === texto || g.cod_grupo.includes(texto);
+        const coincideEquipo = (g.top3 || []).some(eq => eq.equipo.toLowerCase().includes(texto));
+        return coincideGrupo || coincideEquipo;
+      });
+
+      if (!filtrados.length) {
+        contenedor.innerHTML = `<div class="card"><div class="empty-note">No hay resultados con ese filtro.</div></div>`;
+        return;
+      }
+
+      contenedor.innerHTML = filtrados.map(g => {
+        const filas = (g.top3 && g.top3.length)
+          ? g.top3.slice(0, 3).map(eq => `
+              <div class="row">
+                <span class="pos pos-${eq.pos}">${eq.pos}º</span>
+                <span class="team" title="${eq.equipo}">${eq.equipo}</span>
+                <span class="pts">${eq.pts}</span>
+                <span class="pj">${eq.pj}</span>
+              </div>
+            `).join("")
+          : `<div class="empty-note">Pendiente de cargar datos (Cód. ${g.cod_grupo}).</div>`;
+
+        return `
+          <article class="card">
+            <div class="card-header">
+              <span class="group-badge">Grupo ${g.grupo}</span>
+              <a class="group-link" href="${g.url_jornada}" target="_blank" rel="noopener">Futgal (${g.cod_grupo})</a>
+            </div>
+            <div class="cols-head">
+              <span>#</span>
+              <span>Equipo</span>
+              <span>Pts</span>
+              <span>PJ</span>
+            </div>
+            ${filas}
+          </article>
+        `;
+      }).join("");
+    }
+
+    async function cargarDatosJson() {
+      btnActualizar.disabled = true;
+      btnActualizar.textContent = "Cargando...";
+      try {
+        const res = await fetch("./datos.json?_=" + Date.now(), { cache: "no-store" });
+        if (!res.ok) throw new Error("No se encontró datos.json");
+        const data = await res.json();
+        if (data.actualizado_en) {
+          subtitulo.textContent = `Vigo · 1ª Fase · Actualizado: ${data.actualizado_en}`;
+        }
+        if (Array.isArray(data.grupos) && data.grupos.length) {
+          datosGrupos = data.grupos;
+          renderizar();
+        }
+      } catch (_) {
+        renderizar();
+      } finally {
+        btnActualizar.disabled = false;
+        btnActualizar.textContent = "Actualizar";
+      }
+    }
+
+    btnActualizar.addEventListener("click", cargarDatosJson);
+    inputBuscador.addEventListener("input", renderizar);
+    selectGrupo.addEventListener("change", renderizar);
+
+    cargarDatosJson();
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") {
+        cargarDatosJson();
+      }
+    });
+  </script>
+</body>
+</html>
