@@ -3,84 +3,293 @@
   "zona": "Vigo · 1ª Fase",
   "cod_competicion": "26991813",
   "cod_temporada": "22",
-  "actualizado_en": "25/11 21:53",
+  "actualizado_en": "26/11 04:19",
   "grupos": [
     {
       "grupo": 1,
       "cod_grupo": "28767141",
       "url_jornada": "https://www.futgal.es/pnfg/NPcd/NFG_VisClasificacion?cod_primaria=1000120&codcompeticion=26991813&codgrupo=28767141&codtemporada=22",
-      "top3": [],
-      "estado": "sin_datos"
+      "top3": [
+        {
+          "pos": 1,
+          "equipo": "C.D. NIETO \"A\"",
+          "pts": 18,
+          "pj": 3
+        },
+        {
+          "pos": 2,
+          "equipo": "U.D. SANTA MARIÑA \"C\"",
+          "pts": 16,
+          "pj": 3
+        },
+        {
+          "pos": 3,
+          "equipo": "CLUB RAPIDO DE BOUZAS \"B\"",
+          "pts": 16,
+          "pj": 4
+        }
+      ],
+      "estado": "ok"
     },
     {
       "grupo": 2,
       "cod_grupo": "28767176",
       "url_jornada": "https://www.futgal.es/pnfg/NPcd/NFG_VisClasificacion?cod_primaria=1000120&codcompeticion=26991813&codgrupo=28767176&codtemporada=22",
-      "top3": [],
-      "estado": "sin_datos"
+      "top3": [
+        {
+          "pos": 1,
+          "equipo": "ARENAS DE ALCABRE SCD \"A\"",
+          "pts": 24,
+          "pj": 4
+        },
+        {
+          "pos": 2,
+          "equipo": "CD CABRAL",
+          "pts": 21,
+          "pj": 3
+        },
+        {
+          "pos": 3,
+          "equipo": "C.D. VALLADARES \"A\"",
+          "pts": 19,
+          "pj": 4
+        }
+      ],
+      "estado": "ok"
     },
     {
       "grupo": 3,
       "cod_grupo": "28767199",
       "url_jornada": "https://www.futgal.es/pnfg/NPcd/NFG_VisClasificacion?cod_primaria=1000120&codcompeticion=26991813&codgrupo=28767199&codtemporada=22",
-      "top3": [],
-      "estado": "sin_datos"
+      "top3": [
+        {
+          "pos": 1,
+          "equipo": "C.D. COYA \"A\"",
+          "pts": 21,
+          "pj": 3
+        },
+        {
+          "pos": 2,
+          "equipo": "CRISTO VICTORIA S.D. \"B\"",
+          "pts": 19,
+          "pj": 4
+        },
+        {
+          "pos": 3,
+          "equipo": "SAN SALVADOR DE LOUREDO C.D. \"A\"",
+          "pts": 16,
+          "pj": 3
+        }
+      ],
+      "estado": "ok"
     },
     {
       "grupo": 4,
       "cod_grupo": "28767203",
       "url_jornada": "https://www.futgal.es/pnfg/NPcd/NFG_VisClasificacion?cod_primaria=1000120&codcompeticion=26991813&codgrupo=28767203&codtemporada=22",
-      "top3": [],
-      "estado": "sin_datos"
+      "top3": [
+        {
+          "pos": 1,
+          "equipo": "C.D. LA GUIA \"A\"",
+          "pts": 22,
+          "pj": 4
+        },
+        {
+          "pos": 2,
+          "equipo": "U.D. SANTA MARIÑA \"B\"",
+          "pts": 21,
+          "pj": 4
+        },
+        {
+          "pos": 3,
+          "equipo": "SAN ROQUE CASABLANCA",
+          "pts": 20,
+          "pj": 4
+        }
+      ],
+      "estado": "ok"
     },
     {
       "grupo": 5,
       "cod_grupo": "28767240",
       "url_jornada": "https://www.futgal.es/pnfg/NPcd/NFG_VisClasificacion?cod_primaria=1000120&codcompeticion=26991813&codgrupo=28767240&codtemporada=22",
-      "top3": [],
-      "estado": "sin_datos"
+      "top3": [
+        {
+          "pos": 1,
+          "equipo": "CLUB RAPIDO DE BOUZAS \"C\"",
+          "pts": 22,
+          "pj": 4
+        },
+        {
+          "pos": 2,
+          "equipo": "SANTIAGUIÑO DE GUIZAN C.D. \"A\"",
+          "pts": 19,
+          "pj": 4
+        },
+        {
+          "pos": 3,
+          "equipo": "U.V.C.D. CANDEAN",
+          "pts": 18,
+          "pj": 4
+        }
+      ],
+      "estado": "ok"
     },
     {
       "grupo": 6,
       "cod_grupo": "28767243",
       "url_jornada": "https://www.futgal.es/pnfg/NPcd/NFG_VisClasificacion?cod_primaria=1000120&codcompeticion=26991813&codgrupo=28767243&codtemporada=22",
-      "top3": [],
-      "estado": "sin_datos"
+      "top3": [
+        {
+          "pos": 1,
+          "equipo": "E.D. VAL MIÑOR NIGRÁN \"B\"",
+          "pts": 22,
+          "pj": 4
+        },
+        {
+          "pos": 2,
+          "equipo": "C.P. ALERTANAVIA \"A\"",
+          "pts": 19,
+          "pj": 4
+        },
+        {
+          "pos": 3,
+          "equipo": "CLUB APOSTOL SANTIAGO \"A\"",
+          "pts": 19,
+          "pj": 4
+        }
+      ],
+      "estado": "ok"
     },
     {
       "grupo": 7,
       "cod_grupo": "28767271",
       "url_jornada": "https://www.futgal.es/pnfg/NPcd/NFG_VisClasificacion?cod_primaria=1000120&codcompeticion=26991813&codgrupo=28767271&codtemporada=22",
-      "top3": [],
-      "estado": "sin_datos"
+      "top3": [
+        {
+          "pos": 1,
+          "equipo": "U.D. MOS \"A\"",
+          "pts": 22,
+          "pj": 3
+        },
+        {
+          "pos": 2,
+          "equipo": "CLUB APOSTOL SANTIAGO \"C\"",
+          "pts": 21,
+          "pj": 4
+        },
+        {
+          "pos": 3,
+          "equipo": "C.D. CHOCO \"C\"",
+          "pts": 17,
+          "pj": 4
+        }
+      ],
+      "estado": "ok"
     },
     {
       "grupo": 8,
       "cod_grupo": "28767276",
       "url_jornada": "https://www.futgal.es/pnfg/NPcd/NFG_VisClasificacion?cod_primaria=1000120&codcompeticion=26991813&codgrupo=28767276&codtemporada=22",
-      "top3": [],
-      "estado": "sin_datos"
+      "top3": [
+        {
+          "pos": 1,
+          "equipo": "PORRIÑO INDUSTRIAL F.C. \"A\"",
+          "pts": 24,
+          "pj": 4
+        },
+        {
+          "pos": 2,
+          "equipo": "S.D. PONTEAREAS \"A\"",
+          "pts": 21,
+          "pj": 4
+        },
+        {
+          "pos": 3,
+          "equipo": "A.D. VILA DO CORPUS \"C\"",
+          "pts": 18,
+          "pj": 4
+        }
+      ],
+      "estado": "ok"
     },
     {
       "grupo": 9,
       "cod_grupo": "28767279",
       "url_jornada": "https://www.futgal.es/pnfg/NPcd/NFG_VisClasificacion?cod_primaria=1000120&codcompeticion=26991813&codgrupo=28767279&codtemporada=22",
-      "top3": [],
-      "estado": "sin_datos"
+      "top3": [
+        {
+          "pos": 1,
+          "equipo": "ED SALVATERRA \"A\"",
+          "pts": 22,
+          "pj": 3
+        },
+        {
+          "pos": 2,
+          "equipo": "CLUB LOURO TAMEIGA \"A\"",
+          "pts": 22,
+          "pj": 4
+        },
+        {
+          "pos": 3,
+          "equipo": "C.F. CAÑIZA \"A\"",
+          "pts": 16,
+          "pj": 4
+        }
+      ],
+      "estado": "ok"
     },
     {
       "grupo": 10,
       "cod_grupo": "28767351",
       "url_jornada": "https://www.futgal.es/pnfg/NPcd/NFG_VisClasificacion?cod_primaria=1000120&codcompeticion=26991813&codgrupo=28767351&codtemporada=22",
-      "top3": [],
-      "estado": "sin_datos"
+      "top3": [
+        {
+          "pos": 1,
+          "equipo": "A.D. TOMIÑO \"A\"",
+          "pts": 24,
+          "pj": 4
+        },
+        {
+          "pos": 2,
+          "equipo": "E.D. VAL MIÑOR NIGRÁN \"C\"",
+          "pts": 21,
+          "pj": 3
+        },
+        {
+          "pos": 3,
+          "equipo": "A.D. VILA DO CORPUS \"B\"",
+          "pts": 16,
+          "pj": 4
+        }
+      ],
+      "estado": "ok"
     },
     {
       "grupo": 11,
       "cod_grupo": "28767370",
       "url_jornada": "https://www.futgal.es/pnfg/NPcd/NFG_VisClasificacion?cod_primaria=1000120&codcompeticion=26991813&codgrupo=28767370&codtemporada=22",
-      "top3": [],
-      "estado": "sin_datos"
+      "top3": [
+        {
+          "pos": 1,
+          "equipo": "GONDOMAR C.F.",
+          "pts": 24,
+          "pj": 4
+        },
+        {
+          "pos": 2,
+          "equipo": "SPORTING GUARDES \"B\"",
+          "pts": 18,
+          "pj": 4
+        },
+        {
+          "pos": 3,
+          "equipo": "TYDE F.C.",
+          "pts": 18,
+          "pj": 3
+        }
+      ],
+      "estado": "ok"
     }
   ]
 }
