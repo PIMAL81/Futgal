@@ -3,7 +3,7 @@
   "zona": "Vigo · 1ª Fase",
   "cod_competicion": "26991813",
   "cod_temporada": "22",
-  "actualizado_en": "28/11 04:00",
+  "actualizado_en": "28/11 16:59",
   "grupos": [
     {
       "grupo": 1,
@@ -18,14 +18,14 @@
         },
         {
           "pos": 2,
-          "equipo": "U.D. SANTA MARIÑA \"C\"",
-          "pts": 16,
-          "pj": 3
+          "equipo": "CLUB RAPIDO DE BOUZAS \"B\"",
+          "pts": 19,
+          "pj": 5
         },
         {
           "pos": 3,
-          "equipo": "CLUB RAPIDO DE BOUZAS \"B\"",
-          "pts": 16,
+          "equipo": "CLUB PEÑASCO \"A\"",
+          "pts": 17,
           "pj": 4
         }
       ],
@@ -39,19 +39,19 @@
         {
           "pos": 1,
           "equipo": "ARENAS DE ALCABRE SCD \"A\"",
-          "pts": 24,
+          "pts": 27,
           "pj": 4
         },
         {
           "pos": 2,
-          "equipo": "CD CABRAL",
-          "pts": 21,
-          "pj": 3
+          "equipo": "C.D. VALLADARES \"A\"",
+          "pts": 22,
+          "pj": 5
         },
         {
           "pos": 3,
-          "equipo": "C.D. VALLADARES \"A\"",
-          "pts": 19,
+          "equipo": "CD CABRAL",
+          "pts": 21,
           "pj": 4
         }
       ],
@@ -65,14 +65,14 @@
         {
           "pos": 1,
           "equipo": "C.D. COYA \"A\"",
-          "pts": 21,
+          "pts": 22,
           "pj": 3
         },
         {
           "pos": 2,
           "equipo": "CRISTO VICTORIA S.D. \"B\"",
-          "pts": 19,
-          "pj": 4
+          "pts": 20,
+          "pj": 5
         },
         {
           "pos": 3,
@@ -123,14 +123,14 @@
         {
           "pos": 2,
           "equipo": "SANTIAGUIÑO DE GUIZAN C.D. \"A\"",
-          "pts": 19,
-          "pj": 4
+          "pts": 22,
+          "pj": 5
         },
         {
           "pos": 3,
           "equipo": "U.V.C.D. CANDEAN",
-          "pts": 18,
-          "pj": 4
+          "pts": 21,
+          "pj": 5
         }
       ],
       "estado": "ok"
@@ -149,14 +149,14 @@
         {
           "pos": 2,
           "equipo": "C.P. ALERTANAVIA \"A\"",
-          "pts": 19,
-          "pj": 4
+          "pts": 22,
+          "pj": 5
         },
         {
           "pos": 3,
           "equipo": "CLUB APOSTOL SANTIAGO \"A\"",
-          "pts": 19,
-          "pj": 4
+          "pts": 22,
+          "pj": 5
         }
       ],
       "estado": "ok"
@@ -169,8 +169,8 @@
         {
           "pos": 1,
           "equipo": "U.D. MOS \"A\"",
-          "pts": 22,
-          "pj": 3
+          "pts": 25,
+          "pj": 4
         },
         {
           "pos": 2,
@@ -181,8 +181,8 @@
         {
           "pos": 3,
           "equipo": "C.D. CHOCO \"C\"",
-          "pts": 17,
-          "pj": 4
+          "pts": 18,
+          "pj": 5
         }
       ],
       "estado": "ok"
@@ -195,20 +195,20 @@
         {
           "pos": 1,
           "equipo": "PORRIÑO INDUSTRIAL F.C. \"A\"",
-          "pts": 24,
+          "pts": 27,
           "pj": 4
         },
         {
           "pos": 2,
           "equipo": "S.D. PONTEAREAS \"A\"",
-          "pts": 21,
-          "pj": 4
+          "pts": 24,
+          "pj": 5
         },
         {
           "pos": 3,
           "equipo": "A.D. VILA DO CORPUS \"C\"",
-          "pts": 18,
-          "pj": 4
+          "pts": 21,
+          "pj": 5
         }
       ],
       "estado": "ok"
@@ -220,20 +220,20 @@
       "top3": [
         {
           "pos": 1,
+          "equipo": "CLUB LOURO TAMEIGA \"A\"",
+          "pts": 25,
+          "pj": 5
+        },
+        {
+          "pos": 2,
           "equipo": "ED SALVATERRA \"A\"",
           "pts": 22,
           "pj": 3
         },
         {
-          "pos": 2,
-          "equipo": "CLUB LOURO TAMEIGA \"A\"",
-          "pts": 22,
-          "pj": 4
-        },
-        {
           "pos": 3,
           "equipo": "C.F. CAÑIZA \"A\"",
-          "pts": 16,
+          "pts": 19,
           "pj": 4
         }
       ],
@@ -247,8 +247,8 @@
         {
           "pos": 1,
           "equipo": "A.D. TOMIÑO \"A\"",
-          "pts": 24,
-          "pj": 4
+          "pts": 27,
+          "pj": 5
         },
         {
           "pos": 2,
@@ -258,8 +258,8 @@
         },
         {
           "pos": 3,
-          "equipo": "A.D. VILA DO CORPUS \"B\"",
-          "pts": 16,
+          "equipo": "SPORTING GUARDES \"A\"",
+          "pts": 18,
           "pj": 4
         }
       ],
@@ -273,8 +273,8 @@
         {
           "pos": 1,
           "equipo": "GONDOMAR C.F.",
-          "pts": 24,
-          "pj": 4
+          "pts": 27,
+          "pj": 5
         },
         {
           "pos": 2,
@@ -286,7 +286,7 @@
           "pos": 3,
           "equipo": "TYDE F.C.",
           "pts": 18,
-          "pj": 3
+          "pj": 4
         }
       ],
       "estado": "ok"
